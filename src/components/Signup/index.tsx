@@ -1,14 +1,18 @@
 import React from "react";
 
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import { useFormik } from "formik";
 
 import { SignupSchema } from "../../utils/yupSchema";
-
-import styles from "./signup.module.css";
 import { handleSignUp } from "../../services/user";
 
+import styles from "./signup.module.css";
+
 const Signup: React.FC = () => {
+  const navigate = useNavigate();
+
   const { values, errors, handleChange, handleSubmit } = useFormik({
     initialValues: {
       name: "",
@@ -16,9 +20,18 @@ const Signup: React.FC = () => {
       password: "",
     },
     validationSchema: SignupSchema,
+    validateOnChange: false,
+    validateOnBlur: false,
     onSubmit: async (values) => {
-      await handleSignUp(values);
-      console.log("Form submitted:", values);
+      const response = await handleSignUp(values);
+      if (response?.status) {
+        toast.success("Sign up successful");
+        navigate("/");
+      } else {
+        toast.error(
+          "User already exist with this email. please try with another email."
+        );
+      }
     },
   });
 

@@ -16,11 +16,7 @@ export const handleSignUp = async (data: ISignup) => {
 export const handleLogin = async (email: string, password: string) => {
   try {
     const response = await userInstance.post("/login", { email, password });
-
-    if (response.status === 200 || response.status === 201)
-      return response.data;
-
-    throw new Error(`Unexpected response status: ${response.status}`);
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -39,8 +35,16 @@ export const checkAuth = async () => {
 export const handleLogout = async () => {
   try {
     await userInstance.post("/logout");
-    console.log(" Logged out");
   } catch (err) {
     console.error("Logout failed", err);
+  }
+};
+
+export const getAllUsers = async () => {
+  try {
+    const response = await userInstance.get("/get-users");
+    if (response.status === 200) return response.data;
+  } catch (err) {
+    console.error("error occurred in getting all users", err);
   }
 };

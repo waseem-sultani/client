@@ -16,3 +16,7 @@ export const LoginSchema = Yup.object().shape({
     .required("Email is required"),
   password: Yup.string().required("Password is required"),
 });
+
+export const DashboardSchema = Yup.object().shape({
+  title: Yup.string().required("Email is required"),
+});

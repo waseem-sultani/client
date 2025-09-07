@@ -4,23 +4,41 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 
 import { LoginSchema } from "../../utils/yupSchema";
-
-import styles from "./login.module.css";
 import { handleLogin } from "../../services/user";
 
-const Login: React.FC<{ fetchUser: () => Promise<void> }> = ({ fetchUser }) => {
+import toast from "react-hot-toast";
+
+import styles from "./login.module.css";
+
+interface ILoginProps {
+  setUser: React.Dispatch<any>;
+}
+
+const Login: React.FC<ILoginProps> = ({ setUser }) => {
   const { values, errors, handleChange, handleSubmit } = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     validationSchema: LoginSchema,
+    validateOnChange: false,
+    validateOnBlur: false,
     onSubmit: async (values) => {
-      await handleLogin(values.email, values.password);
-      await fetchUser();
-      console.log("Form submitted:", values);
+      const response = await handleLogin(values.email, values.password);
+      console.log("res:", response);
+      if (response?.status) {
+        toast.success("Login successful");
+        setUser(response?.user);
+      } else {
+        if (response?.reason === "email") {
+          toast.error("No user with this email");
+        } else {
+          toast.error("Incorrect password, please type the valid password");
+        }
+      }
     },
   });
+
   return (
     <div className={styles.container}>
       <form className={styles.formWrapper} onSubmit={handleSubmit}>

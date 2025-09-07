@@ -10,11 +10,9 @@ const AuthWrapper: React.FC = () => {
   const fetchUser = async () => {
     try {
       const data = await checkAuth();
-      console.log("data", data);
       setUser(data);
     } catch (err) {
       setUser(null);
-    } finally {
     }
   };
 
@@ -26,7 +24,7 @@ const AuthWrapper: React.FC = () => {
     return <Dashboard setUser={setUser} />;
   }
 
-  return <Login fetchUser={fetchUser} />;
+  return <Login setUser={setUser} />;
 };
 
 export default AuthWrapper;
