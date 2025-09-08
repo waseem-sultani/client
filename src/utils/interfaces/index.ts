@@ -22,4 +22,5 @@ export interface IIssue {
   assignee: string | IAssignee;
   tags: string[];
   _id?: string;
+  userId?: IAssignee;
 }

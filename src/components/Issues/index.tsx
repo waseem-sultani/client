@@ -151,22 +151,21 @@ const Issues: React.FC<IIssueProp> = ({
                 <span className={styles.priority}>
                   Priority: {issue.priority || "No priority"}
                 </span>
-                {isAssigned && (
-                  <span className={styles.assignee}>
-                    Assignee by:
-                    {typeof issue?.assignee === "string"
-                      ? "Unassigned"
-                      : issue?.assignee?.name || "Unassigned"}
-                  </span>
-                )}
-                {!isAssigned && (
-                  <span className={styles.assignee}>
-                    Assignee to
-                    {typeof issue?.assignee === "string"
-                      ? "Unassigned"
-                      : issue?.assignee?.name || "Unassigned"}
-                  </span>
-                )}
+                <span className={styles.assignee}>
+                  {isAssigned
+                    ? `Assigned by: ${
+                        issue &&
+                        typeof issue.userId !== "string" &&
+                        issue.userId?.name
+                          ? issue.userId.name
+                          : "Unassigned"
+                      }`
+                    : `Assigned to: ${
+                        typeof issue?.assignee === "string"
+                          ? "Unassigned"
+                          : issue?.assignee?.name || "Unassigned"
+                      }`}
+                </span>
               </div>
               {issue.tags?.length > 0 && (
                 <div className={styles.tags}>
